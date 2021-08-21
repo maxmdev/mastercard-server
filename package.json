@@ -1,0 +1,23 @@
+{
+  "name": "mastercard-rest",
+  "version": "1.0.0",
+  "description": "REST API server for MasterCard API interaction.",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js"
+  },
+  "keywords": [
+    "rest",
+    "api",
+    "mastercard"
+  ],
+  "author": "M. M.",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.12"
+  }
+}
