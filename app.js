@@ -5,6 +5,7 @@ const path = require('path');
 const forge = require('node-forge');
 const fs = require('fs');
 const oauthSigner = require('mastercard-oauth1-signer');
+const perform = require('./request.js');
 
 // Defines a server
 const server = express();
@@ -45,8 +46,25 @@ server.post('/api/termination-inquiry', (req, res) => {
     const authHeader = oauthSigner.getAuthorizationHeader(uri, method, bodyData, consumerKey, signingKey);
 
     // Performs a request to MasterCard
-
-    res.status(200).json(authHeader);
+    perform.request(uri, {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': authHeader
+        },
+        body: bodyData,
+        cache: 'no-cache',
+        redirect: 'follow'
+    })
+        .then(data => {
+            console.log(data);
+            res.status(200).json(data);
+        })
+        .catch(error => {
+            console.log(error);
+            res.status(200).json(error);
+        })
 })
 
 server.listen(3000, () => console.log('Started successfully on port 3000...'));
