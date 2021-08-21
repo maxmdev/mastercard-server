@@ -1,11 +1,16 @@
-// Imports necessary libraries
+// Defines constants
+const API_SANDBOX_URL = 'https://sandbox.api.mastercard.com/fraud/merchant/v3/';
+//const API_PROD_URL = 'https://api.mastercard.com/fraud/merchant/v3/';
+const API_URL = API_SANDBOX_URL;
+
+// Imports libraries
 const express = require('express');
 const formData = require('express-form-data');
 const path = require('path');
-const forge = require('node-forge');
-const fs = require('fs');
+
 const oauthSigner = require('mastercard-oauth1-signer');
 const perform = require('./request.js');
+const keyRetriever = require('./keyRetriever.js');
 
 // Defines a server
 const server = express();
@@ -28,20 +33,11 @@ server.post('/api/termination-inquiry', (req, res) => {
     const bodyData = req.body.data; // object "data" to resend
     const consumerKey = req.header('ConsumerKey'); // consumer key
 
-    // Retrieves signing key from certificate
-    const p12Content = fs.readFileSync(privateKey.path, 'binary');
-    const p12Asn1 = forge.asn1.fromDer(p12Content, false);
-    const p12 = forge.pkcs12.pkcs12FromAsn1(p12Asn1, false, keyPassword);
-    const keyObj = p12.getBags({
-        friendlyName: keyAlias,
-        bagType: forge.pki.oids.pkcs8ShroudedKeyBag
-    }).friendlyName[0];
-
     // Defines signing key variable
-    const signingKey = forge.pki.privateKeyToPem(keyObj.key);
+    const signingKey = keyRetriever.retrieveKey(privateKey.path, keyPassword, keyAlias);
 
     // Defines OAuth Authorization Header
-    const uri = 'https://sandbox.api.mastercard.com/fraud/merchant/v3/termination-inquiry?ExtraFields=true&Format=JSON&PageLength=10';
+    const uri = API_URL+req.url.toString().split('/api/').pop()
     const method = 'POST';
     const authHeader = oauthSigner.getAuthorizationHeader(uri, method, bodyData, consumerKey, signingKey);
 
@@ -58,11 +54,9 @@ server.post('/api/termination-inquiry', (req, res) => {
         redirect: 'follow'
     })
         .then(data => {
-            console.log(data);
             res.status(200).json(data);
         })
         .catch(error => {
-            console.log(error);
             res.status(200).json(error);
         })
 })
