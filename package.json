@@ -15,7 +15,10 @@
   "author": "M. M.",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "express-form-data": "^2.0.17",
+    "mastercard-oauth1-signer": "^1.1.5",
+    "node-forge": "^0.10.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.12"
