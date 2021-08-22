@@ -1,6 +1,6 @@
 // Defines constants
 const API_SANDBOX_URL = 'https://sandbox.api.mastercard.com/fraud/merchant/v3/';
-const API_PROD_URL = 'https://api.mastercard.com/fraud/merchant/v3/';
+//const API_PROD_URL = 'https://api.mastercard.com/fraud/merchant/v3/';
 const API_URL = API_SANDBOX_URL;
 
 // Imports libraries
@@ -213,6 +213,7 @@ server.post('/api/retro/retro-inquiry-details', (req, res) => {
         .catch(error => res.status(500).send(error.message));
 });
 
+// Starts a server
 https.createServer({
     key: fs.readFileSync('./key.pem'),
     cert: fs.readFileSync('./cert.pem'),
