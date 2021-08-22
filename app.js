@@ -24,7 +24,7 @@ server.get('/', (req, res) => {
     res.sendFile(path.resolve(__dirname, 'client', 'index.html'));
 });
 
-// POST /termination-inquiry
+// POST [/termination-inquiry]
 server.post('/api/termination-inquiry', (req, res) => {
     // Retrieves necessary data from request
     const data = perform.retrieve(req);
@@ -53,9 +53,9 @@ server.post('/api/termination-inquiry', (req, res) => {
     })
         .then(data => res.status(200).json(data))
         .catch(error => res.status(500).send(error.message))
-})
+});
 
-// GET /termination-inquiry/{IRN}
+// GET [/termination-inquiry/{IRN}]
 server.post('/api/termination-inquiry/:IRN', (req, res) => {
     // Retrieves data from request
     const data = perform.retrieve(req);
@@ -85,9 +85,9 @@ server.post('/api/termination-inquiry/:IRN', (req, res) => {
     })
         .then(data => res.status(200).json(data))
         .catch(error => res.status(500).send(error.message))
-})
+});
 
-// POST /add-merchant
+// POST [/add-merchant]
 server.post('/api/add-merchant', (req, res) => {
     // Retrieves data from request
     const data = perform.retrieve(req);
@@ -116,9 +116,9 @@ server.post('/api/add-merchant', (req, res) => {
     })
         .then(data => res.status(200).json(data))
         .catch(error => res.status(500).send(error.message))
-})
+});
 
-// POST /common/contact-details
+// POST [/common/contact-details]
 server.post('/api/common/contact-details', (req, res) => {
     // Retrieves data from request
     const data = perform.retrieve(req);
@@ -147,8 +147,37 @@ server.post('/api/common/contact-details', (req, res) => {
     })
         .then(data => res.status(200).json(data))
         .catch(error => res.status(500).send(error.message));
+});
 
+// POST [/retro/retro-list]
+server.post('/api/retro/retro-list', (req, res) => {
+    // Retrieves data from request
+    const data = perform.retrieve(req);
+
+    // Defines a signing key variable
+    const signingKey = keyRetriever.retrieveKey(data.privateKey.path, data.keyPassword, data.keyAlias);
+
+    // Defines a request parameters
+    const uri = API_URL + req.url.toString().split('/api/').pop();
+    const method = 'POST';
+
+    // Defines OAuth Authorization header
+    const authHeader = oauthSigner.getAuthorizationHeader(uri, method, data.bodyData, data.consumerKey, signingKey);
+
+    // Performs a request to MasterCard
+    perform.request(uri, {
+        method: method,
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': authHeader
+        },
+        body: data.bodyData,
+        cache: 'no-cache',
+        redirect: 'follow'
+    })
+        .then(data => res.status(200).json(data))
+        .catch(error => res.status(500).send(error.message));
 })
-
 
 server.listen(3000, () => console.log('Started successfully on port 3000...'));

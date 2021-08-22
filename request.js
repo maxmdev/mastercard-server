@@ -6,7 +6,7 @@ async function request(uri, params = {}) {
         if (response.status === 200) {
             return await response.json();
         } else {
-            throw new Error('An error occurred.');
+            throw new Error('An error occurred.' + response.status);
         }
 }
 
