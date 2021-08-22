@@ -24,22 +24,18 @@ server.get('*', (req, res) => {
     res.sendFile(path.resolve(__dirname, 'client', 'index.html'));
 });
 
-// POST
+// POST /termination-inquiry
 server.post('/api/termination-inquiry', (req, res) => {
     // Retrieves necessary data from request
-    const privateKey = req.files.privateKey; // p12 file
-    const keyPassword = req.body.password; // password to p12 file
-    const keyAlias = req.body.keyAlias; // alias for key
-    const bodyData = req.body.data; // object "data" to resend
-    const consumerKey = req.header('ConsumerKey'); // consumer key
+    const data = perform.retrieve(req);
 
     // Defines signing key variable
-    const signingKey = keyRetriever.retrieveKey(privateKey.path, keyPassword, keyAlias);
+    const signingKey = keyRetriever.retrieveKey(data.privateKey.path, data.keyPassword, data.keyAlias);
 
     // Defines OAuth Authorization Header
     const uri = API_URL+req.url.toString().split('/api/').pop()
     const method = 'POST';
-    const authHeader = oauthSigner.getAuthorizationHeader(uri, method, bodyData, consumerKey, signingKey);
+    const authHeader = oauthSigner.getAuthorizationHeader(uri, method, data.bodyData, data.consumerKey, signingKey);
 
     // Performs a request to MasterCard
     perform.request(uri, {
@@ -49,7 +45,7 @@ server.post('/api/termination-inquiry', (req, res) => {
             'Content-Type': 'application/json',
             'Authorization': authHeader
         },
-        body: bodyData,
+        body: data.bodyData,
         cache: 'no-cache',
         redirect: 'follow'
     })
@@ -60,5 +56,8 @@ server.post('/api/termination-inquiry', (req, res) => {
             res.status(200).json(error);
         })
 })
+
+// GET /termination-inquiry/{id}
+
 
 server.listen(3000, () => console.log('Started successfully on port 3000...'));
