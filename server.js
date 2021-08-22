@@ -12,8 +12,8 @@ const fs = require('fs');
 
 const oauthSigner = require('mastercard-oauth1-signer');
 const perform = require('./request.js');
-const keyRetriever = require('./keyRetriever.js');
 const url = require('./url');
+const key = require('./key');
 
 // Defines a server
 const server = express();
@@ -33,7 +33,7 @@ server.post('/api/termination-inquiry', (req, res) => {
     const data = perform.retrieve(req);
 
     // Defines signing key variable
-    const signingKey = keyRetriever.retrieveKey(data.privateKey.path, data.keyPassword, data.keyAlias);
+    const signingKey = key.get(data);
 
     // Defines request parameters
     const uri = url.create(API_URL, req);
@@ -64,7 +64,7 @@ server.post('/api/termination-inquiry/:IRN', (req, res) => {
     const data = perform.retrieve(req);
 
     // Defines a signing key variable
-    const signingKey = keyRetriever.retrieveKey(data.privateKey.path, data.keyPassword, data.keyAlias);
+    const signingKey = key.get(data);
 
     // Defines request parameters
     const uri = url.create(API_URL, req);
@@ -96,7 +96,7 @@ server.post('/api/add-merchant', (req, res) => {
     const data = perform.retrieve(req);
 
     // Defines a signing key variable
-    const signingKey = keyRetriever.retrieveKey(data.privateKey.path, data.keyPassword, data.keyAlias);
+    const signingKey = key.get(data);
 
     // Defines request parameters
     const uri = url.create(API_URL, req);
@@ -127,7 +127,7 @@ server.post('/api/common/contact-details', (req, res) => {
     const data = perform.retrieve(req);
 
     // Defines a signing key variable
-    const signingKey = keyRetriever.retrieveKey(data.privateKey.path, data.keyPassword, data.keyAlias);
+    const signingKey = key.get(data);
 
     // Defines a request parameters
     const uri = url.create(API_URL, req);
@@ -158,7 +158,7 @@ server.post('/api/retro/retro-list', (req, res) => {
     const data = perform.retrieve(req);
 
     // Defines a signing key variable
-    const signingKey = keyRetriever.retrieveKey(data.privateKey.path, data.keyPassword, data.keyAlias);
+    const signingKey = key.get(data);
 
     // Defines a request parameters
     const uri = url.create(API_URL, req);
@@ -189,7 +189,7 @@ server.post('/api/retro/retro-inquiry-details', (req, res) => {
     const data = perform.retrieve(req);
 
     // Defines a signing key variable
-    const signingKey = keyRetriever.retrieveKey(data.privateKey.path, data.keyPassword, data.keyAlias);
+    const signingKey = key.get(data);
 
     // Defines a request parameters
     const uri = url.create(API_URL, req);
