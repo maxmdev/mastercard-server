@@ -7,6 +7,8 @@ const API_URL = API_SANDBOX_URL;
 const express = require('express');
 const formData = require('express-form-data');
 const path = require('path');
+const https = require('https');
+const fs = require('fs');
 
 const oauthSigner = require('mastercard-oauth1-signer');
 const perform = require('./request.js');
@@ -211,4 +213,8 @@ server.post('/api/retro/retro-inquiry-details', (req, res) => {
         .catch(error => res.status(500).send(error.message));
 });
 
-server.listen(3000, () => console.log('Started successfully on port 3000...'));
+https.createServer({
+    key: fs.readFileSync('./key.pem'),
+    cert: fs.readFileSync('./cert.pem'),
+    passphrase: 'mastercard'
+}, server).listen(3000, () => console.log('Started successfully on port 3000...'));
