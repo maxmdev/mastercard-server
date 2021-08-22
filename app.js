@@ -41,7 +41,7 @@ server.post('/api/termination-inquiry', (req, res) => {
 
     // Performs a request to MasterCard
     perform.request(uri, {
-        method: 'POST',
+        method: method,
         headers: {
             Accept: 'application/json',
             'Content-Type': 'application/json',
@@ -51,12 +51,8 @@ server.post('/api/termination-inquiry', (req, res) => {
         cache: 'no-cache',
         redirect: 'follow'
     })
-        .then(data => {
-            res.status(200).json(data);
-        })
-        .catch(error => {
-            res.status(500).send(error.message);
-        })
+        .then(data => res.status(200).json(data))
+        .catch(error => res.status(500).send(error.message))
 })
 
 // GET /termination-inquiry/{IRN}
@@ -77,7 +73,7 @@ server.post('/api/termination-inquiry/:IRN', (req, res) => {
 
     // Performs a request to MasterCard
     perform.request(uri, {
-        method: 'GET',
+        method: method,
         headers: {
             Accept: 'application/json',
             'Content-Type': 'application/json',
@@ -87,14 +83,11 @@ server.post('/api/termination-inquiry/:IRN', (req, res) => {
         cache: 'no-cache',
         redirect: 'follow'
     })
-        .then(data => {
-            res.status(200).json(data);
-        })
-        .catch(error => {
-            res.status(500).send(error.message);
-        })
+        .then(data => res.status(200).json(data))
+        .catch(error => res.status(500).send(error.message))
 })
 
+// POST /add-merchant
 server.post('/api/add-merchant', (req, res) => {
     // Retrieves data from request
     const data = perform.retrieve(req);
@@ -111,7 +104,7 @@ server.post('/api/add-merchant', (req, res) => {
 
     // Performs a request to MasterCard
     perform.request(uri, {
-        method: 'POST',
+        method: method,
         headers: {
             Accept: 'application/json',
             'Content-Type': 'application/json',
@@ -121,12 +114,40 @@ server.post('/api/add-merchant', (req, res) => {
         cache: 'no-cache',
         redirect: 'follow'
     })
-        .then(data => {
-            res.status(200).json(data);
-        })
-        .catch(error => {
-            res.status(500).send(error.message);
-        })
+        .then(data => res.status(200).json(data))
+        .catch(error => res.status(500).send(error.message))
+})
+
+// POST /common/contact-details
+server.post('/api/common/contact-details', (req, res) => {
+    // Retrieves data from request
+    const data = perform.retrieve(req);
+
+    // Defines a signing key variable
+    const signingKey = keyRetriever.retrieveKey(data.privateKey.path, data.keyPassword, data.keyAlias);
+
+    // Defines a request parameters
+    const uri = API_URL + req.url.toString().split('/api/').pop();
+    const method = 'POST';
+
+    // Defines OAuth Authorization header
+    const authHeader = oauthSigner.getAuthorizationHeader(uri, method, data.bodyData, data.consumerKey, signingKey);
+
+    // Performs a request to MasterCard
+    perform.request(uri, {
+        method: method,
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': authHeader
+        },
+        body: data.bodyData,
+        cache: 'no-cache',
+        redirect: 'follow'
+    })
+        .then(data => res.status(200).json(data))
+        .catch(error => res.status(500).send(error.message));
+
 })
 
 
