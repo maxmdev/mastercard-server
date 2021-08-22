@@ -13,6 +13,7 @@ const fs = require('fs');
 const oauthSigner = require('mastercard-oauth1-signer');
 const perform = require('./request.js');
 const keyRetriever = require('./keyRetriever.js');
+const url = require('./url');
 
 // Defines a server
 const server = express();
@@ -35,7 +36,7 @@ server.post('/api/termination-inquiry', (req, res) => {
     const signingKey = keyRetriever.retrieveKey(data.privateKey.path, data.keyPassword, data.keyAlias);
 
     // Defines request parameters
-    const uri = API_URL+req.url.toString().split('/api/').pop();
+    const uri = url.create(API_URL, req);
     const method = 'POST';
 
     // Defines OAuth Authorization Header
@@ -66,7 +67,7 @@ server.post('/api/termination-inquiry/:IRN', (req, res) => {
     const signingKey = keyRetriever.retrieveKey(data.privateKey.path, data.keyPassword, data.keyAlias);
 
     // Defines request parameters
-    const uri = API_URL + req.url.toString().split('/api/').pop();
+    const uri = url.create(API_URL, req);
     const method = 'GET';
 
     // Defines OAuth Authorization Header
@@ -98,7 +99,7 @@ server.post('/api/add-merchant', (req, res) => {
     const signingKey = keyRetriever.retrieveKey(data.privateKey.path, data.keyPassword, data.keyAlias);
 
     // Defines request parameters
-    const uri = API_URL + req.url.toString().split('/api/').pop();
+    const uri = url.create(API_URL, req);
     const method = 'POST';
 
     // Defines OAuth Authorization header
@@ -129,7 +130,7 @@ server.post('/api/common/contact-details', (req, res) => {
     const signingKey = keyRetriever.retrieveKey(data.privateKey.path, data.keyPassword, data.keyAlias);
 
     // Defines a request parameters
-    const uri = API_URL + req.url.toString().split('/api/').pop();
+    const uri = url.create(API_URL, req);
     const method = 'POST';
 
     // Defines OAuth Authorization header
@@ -160,7 +161,7 @@ server.post('/api/retro/retro-list', (req, res) => {
     const signingKey = keyRetriever.retrieveKey(data.privateKey.path, data.keyPassword, data.keyAlias);
 
     // Defines a request parameters
-    const uri = API_URL + req.url.toString().split('/api/').pop();
+    const uri = url.create(API_URL, req);
     const method = 'POST';
 
     // Defines OAuth Authorization header
@@ -191,7 +192,7 @@ server.post('/api/retro/retro-inquiry-details', (req, res) => {
     const signingKey = keyRetriever.retrieveKey(data.privateKey.path, data.keyPassword, data.keyAlias);
 
     // Defines a request parameters
-    const uri = API_URL + req.url.toString().split('/api/').pop();
+    const uri = url.create(API_URL, req);
     const method = 'POST';
 
     // Defines OAuth Authorization header
