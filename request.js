@@ -1,12 +1,13 @@
 const fetch = require("node-fetch");
 
 async function request(uri, params = {}) {
-    try {
         const response = await fetch(uri, params);
-        return await response.json();
-    } catch(e) {
-        return e;
-    }
+
+        if (response.status === 200) {
+            return await response.json();
+        } else {
+            throw new Error('An error occurred.');
+        }
 }
 
 function retrieve(request) {

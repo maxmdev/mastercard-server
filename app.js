@@ -55,7 +55,7 @@ server.post('/api/termination-inquiry', (req, res) => {
             res.status(200).json(data);
         })
         .catch(error => {
-            res.status(400).json(error);
+            res.status(500).send(error.message);
         })
 })
 
@@ -69,7 +69,6 @@ server.post('/api/termination-inquiry/:IRN', (req, res) => {
 
     // Defines request parameters
     const uri = API_URL + req.url.toString().split('/api/').pop();
-    console.log(uri);
     const method = 'GET';
 
     // Defines OAuth Authorization Header
@@ -92,7 +91,41 @@ server.post('/api/termination-inquiry/:IRN', (req, res) => {
             res.status(200).json(data);
         })
         .catch(error => {
-            res.status(400).json(error);
+            res.status(500).send(error.message);
+        })
+})
+
+server.post('/api/add-merchant', (req, res) => {
+    // Retrieves data from request
+    const data = perform.retrieve(req);
+
+    // Defines a signing key variable
+    const signingKey = keyRetriever.retrieveKey(data.privateKey.path, data.keyPassword, data.keyAlias);
+
+    // Defines request parameters
+    const uri = API_URL + req.url.toString().split('/api/').pop();
+    const method = 'POST';
+
+    // Defines OAuth Authorization header
+    const authHeader = oauthSigner.getAuthorizationHeader(uri, method, data.bodyData, data.consumerKey, signingKey);
+
+    // Performs a request to MasterCard
+    perform.request(uri, {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': authHeader
+        },
+        body: data.bodyData,
+        cache: 'no-cache',
+        redirect: 'follow'
+    })
+        .then(data => {
+            res.status(200).json(data);
+        })
+        .catch(error => {
+            res.status(500).send(error.message);
         })
 })
 
