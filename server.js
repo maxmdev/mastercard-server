@@ -245,7 +245,7 @@ server.post('/api/authorize', (req, res) => {
         cache: 'no-cache',
         redirect: 'follow'
     })
-        .then(data => res.status(200).json(data))
+        .then(data => res.status(200).json('OK'))
         .catch(error => res.status(500).json(error.message));
 });
 
