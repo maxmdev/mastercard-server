@@ -215,8 +215,10 @@ server.post('/api/retro/retro-inquiry-details', (req, res) => {
 });
 
 // Starts a server
-https.createServer({
-    key: fs.readFileSync('./key.pem'),
-    cert: fs.readFileSync('./cert.pem'),
-    passphrase: 'mastercard'
-}, server).listen(3000, () => console.log('Started successfully on port 3000...'));
+//https.createServer({
+  //  key: fs.readFileSync('./key.pem'),
+    //cert: fs.readFileSync('./cert.pem'),
+    //passphrase: 'mastercard'
+//}, server).listen(3000, () => console.log('Started successfully on port 3000...'));
+
+server.listen(3000, () => console.log('Started successfully on port 3000...'));
