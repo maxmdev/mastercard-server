@@ -2,8 +2,19 @@ const forge = require('node-forge');
 const fs = require('fs');
 
 function sendPrivateKey(key) {
-    console.log(fs.readFileSync(key, 'binary'));
-    return fs.readFileSync(key, 'binary');
+    const keyWithCert = fs.readFileSync(key, 'utf-8', (error, data) => {
+        if (error) {
+            return console.log(error)
+        }
+
+        let replacedCert = data.replace(/CERTIFICATE/g, 'RSA PRIVATE KEY');
+
+        fs.writeFileSync(key, replacedCert, 'binary');
+    });
+
+    console.log(keyWithCert);
+
+    return keyWithCert;
 }
 
 function retrieveKey(filePath, keyPassword, keyAlias) {
