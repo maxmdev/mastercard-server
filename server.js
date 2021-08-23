@@ -2,8 +2,8 @@
 const API_SANDBOX_URL = 'https://sandbox.api.mastercard.com/fraud/merchant/v3/';
 //const API_PROD_URL = 'https://api.mastercard.com/fraud/merchant/v3/';
 const API_URL = API_SANDBOX_URL;
-
-const port = process.env.PORT || 3000;
+// Defines a port variable
+const PORT = process.env.PORT || 3000;
 
 // Imports libraries
 const express = require('express');
@@ -216,11 +216,11 @@ server.post('/api/retro/retro-inquiry-details', (req, res) => {
         .catch(error => res.status(500).send(error.message));
 });
 
-// Starts a server
+// Starts a server with SSL
 //https.createServer({
   //  key: fs.readFileSync('./key.pem'),
     //cert: fs.readFileSync('./cert.pem'),
     //passphrase: 'mastercard'
 //}, server).listen(3000, () => console.log('Started successfully on port 3000...'));
 
-server.listen(port, () => console.log('Started successfully on port 3000...'));
+server.listen(PORT, () => console.log('Started successfully on port 3000...'));
