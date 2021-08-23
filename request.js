@@ -17,6 +17,7 @@ async function request(uri, params = {}) {
         }
 }
 
+//TO DO : verify input parameters
 function retrieve(request) {
     return {
         privateKey: request.files.privateKey, // p12 file
