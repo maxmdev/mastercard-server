@@ -242,7 +242,6 @@ server.post('/api/authorize', (req, res) => {
             'Content-Type': 'application/json',
             'Authorization': authHeader
         },
-        body: null,
         cache: 'no-cache',
         redirect: 'follow'
     })
