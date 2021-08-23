@@ -6,13 +6,13 @@ function retrieveKey(filePath, keyPassword, keyAlias) {
     const p12Content = fs.readFileSync(filePath, 'binary');
     const p12Asn1 = forge.asn1.fromDer(p12Content);
     const p12 = forge.pkcs12.pkcs12FromAsn1(p12Asn1, false, keyPassword);
-    console.log('p12:', p12);
     const keyObj = p12.getBags({
         friendlyName: keyAlias,
         bagType: forge.pki.oids.pkcs8ShroudedKeyBag
     }).friendlyName[0];
 
     // Returns a signing key
+    console.log('signing key: ', forge.pki.privateKeyToPem(keyObj.key);)
     return forge.pki.privateKeyToPem(keyObj.key);
 }
 
