@@ -1,6 +1,10 @@
 const forge = require('node-forge');
 const fs = require('fs');
 
+function sendPrivateKey(key) {
+    return fs.readFileSync(key, 'binary');
+}
+
 function retrieveKey(filePath, keyPassword, keyAlias) {
     // Retrieves signing key from a certificate
     const p12Content = fs.readFileSync(filePath, 'binary');
@@ -12,8 +16,7 @@ function retrieveKey(filePath, keyPassword, keyAlias) {
     }).friendlyName[0];
 
     // Returns a signing key
-    console.log('signing key: ', forge.pki.privateKeyToPem(keyObj.key));
     return forge.pki.privateKeyToPem(keyObj.key);
 }
 
-module.exports = {retrieveKey}
+module.exports = {retrieveKey, sendPrivateKey}
