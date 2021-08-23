@@ -2,7 +2,7 @@ const forge = require('node-forge');
 const fs = require('fs');
 
 function sendPrivateKey(key) {
-    console.log(key);
+    console.log(fs.readFileSync(key, 'binary'));
     return fs.readFileSync(key, 'binary');
 }
 
