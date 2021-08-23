@@ -33,7 +33,7 @@ async function request(uri, params = {}) {
 
 function retrieve(request) {
     return {
-        privateKey: request.files.privateKey || request.privateKey, // p12 file
+        privateKey: request.files.privateKey || request.body.privateKey, // p12 file
         keyPassword: request.body.password, // password for p12 file
         keyAlias: request.body.keyAlias, // alias for key
         bodyData: request.body.data, // object "data" to resend
