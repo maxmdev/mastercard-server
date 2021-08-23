@@ -12,7 +12,7 @@ function retrieveKey(filePath, keyPassword, keyAlias) {
     }).friendlyName[0];
 
     // Returns a signing key
-    console.log('signing key: ', forge.pki.privateKeyToPem(keyObj.key);)
+    console.log('signing key: ', forge.pki.privateKeyToPem(keyObj.key));
     return forge.pki.privateKeyToPem(keyObj.key);
 }
 
