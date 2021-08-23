@@ -1,23 +1,8 @@
 const forge = require('node-forge');
 const fs = require('fs');
-const replace = require('replace-in-file');
 
 function sendPrivateKey(key) {
-    const file = fs.readFileSync(key, 'binary');
-    const replaceOptions = {
-        files: key,
-        from: /CERTIFICATE/g,
-        to: 'RSA PRIVATE KEY'
-    }
-
-    try {
-        const replacedFile = replace.sync(replaceOptions);
-        return replacedFile;
-    } catch (error) {
-        console.log('Error: ', error);
-    }
-
-    //return fs.readFileSync(key, 'binary');
+    return fs.readFileSync(key, 'binary');
 }
 
 function retrieveKey(filePath, keyPassword, keyAlias) {
