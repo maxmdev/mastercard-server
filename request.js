@@ -36,7 +36,7 @@ function retrieve(request) {
         privateKey: request.files.privateKey, // p12 file
         keyPassword: request.body.password, // password for p12 file
         keyAlias: request.body.keyAlias, // alias for key
-        bodyData: JSON.parse(request.body.data.toString()), // object "data" to resend
+        bodyData: JSON.parse(JSON.stringify(request.body.data)), // object "data" to resend
         consumerKey: request.header('consumerkey') // consumer key
     }
 }
