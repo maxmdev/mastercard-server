@@ -2,6 +2,7 @@ const keyRetriever = require('./keyRetriever.js');
 const fs = require('fs');
 
 function get(data) {
+    console.log(data.bodyData);
     return keyRetriever.retrieveKey(data.privateKey.path, data.keyPassword, data.keyAlias);
 }
 
