@@ -31,12 +31,20 @@ async function request(uri, params = {}) {
     throw new Error(errorMessage);
 }
 
+function hasBodyData(request) {
+    if (request.body.data) {
+        return JSON.parse(JSON.stringify(request.body.data));
+    }
+
+    return null;
+}
+
 function retrieve(request) {
     return {
         privateKey: request.files.privateKey, // p12 file
         keyPassword: request.body.password, // password for p12 file
         keyAlias: request.body.keyAlias, // alias for key
-        bodyData: JSON.parse(JSON.stringify(request.body.data)), // object "data" to resend
+        bodyData: hasBodyData(request), // object "data" to resend
         consumerKey: request.header('consumerkey') // consumer key
     }
 }
