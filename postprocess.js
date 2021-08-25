@@ -3,7 +3,7 @@ function addReferenceID (data) {
     if (data.hasOwnProperty('TerminationInquiry')) {
         try {
             // Takes number value from URL "Ref"
-            data.refId =
+            data.TerminationInquiry.refId =
                 data.TerminationInquiry['Ref'].substring(data.TerminationInquiry['Ref'].lastIndexOf('/') + 1);
 
             // Returns data with new property
