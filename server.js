@@ -17,6 +17,7 @@ const oauthSigner = require('mastercard-oauth1-signer');
 const perform = require('./request.js');
 const url = require('./url');
 const key = require('./key');
+const postprocess = require('./postprocess');
 
 // Defines a server
 const server = express();
@@ -58,7 +59,7 @@ server.post('/api/termination-inquiry', (req, res) => {
         cache: 'no-cache',
         redirect: 'follow'
     })
-        .then(data => res.status(200).json(data))
+        .then(data => res.status(200).json(postprocess.addReferenceID(data)))
         .catch(error => res.status(500).send(error.message))
 });
 
