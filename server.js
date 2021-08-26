@@ -1,7 +1,10 @@
 // Defines constants
 const API_SANDBOX_URL = 'https://sandbox.api.mastercard.com/fraud/merchant/v3/';
-//const API_PROD_URL = 'https://api.mastercard.com/fraud/merchant/v3/';
+const API_PROD_URL = 'https://api.mastercard.com/fraud/merchant/v3/';
+
+// Defines API Endpoint URL
 const API_URL = API_SANDBOX_URL;
+
 // Defines a port variable
 const PORT = process.env.PORT || 3000;
 
@@ -203,8 +206,6 @@ server.post('/api/retro/retro-inquiry-details', (req, res) => {
     // Defines OAuth Authorization header
     const authHeader = oauthSigner.getAuthorizationHeader(uri, method, data.bodyData, data.consumerKey, signingKey);
 
-    console.log(data.bodyData)
-
     // Performs a request to MasterCard
     perform.request(uri, {
         method: method,
@@ -223,40 +224,8 @@ server.post('/api/retro/retro-inquiry-details', (req, res) => {
 
 // POST [/]
 server.post('/api/authorize', (req, res) => {
-    // Retrieves data from request
-    const data = perform.retrieve(req);
-
-    // Defines a signing key variable
-    const signingKey = key.get(data);
-
-    // Defines a request parameters
-    const uri = API_URL + 'termination-inquiry/19962021082200007?PageOffset=0&PageLength=10&Format=JSON&AcquirerId=1996';
-    const method = 'GET';
-
-    // Defines OAuth Authorization header
-    const payload = null;
-    const authHeader = oauthSigner.getAuthorizationHeader(uri, method, payload, data.consumerKey, signingKey);
-
-    // Performs a request to MasterCard
-    perform.request(uri, {
-        method: method,
-        headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-            'Authorization': authHeader
-        },
-        cache: 'no-cache',
-        redirect: 'follow'
-    })
-        .then(data => res.status(200).json('OK'))
-        .catch(error => res.status(500).json(error.message));
+    // Returns a status if is alive
+    res.status(200).json('OK')
 });
-
-// Starts a server with SSL
-//https.createServer({
-  //  key: fs.readFileSync('./key.pem'),
-    //cert: fs.readFileSync('./cert.pem'),
-    //passphrase: 'mastercard'
-//}, server).listen(3000, () => console.log('Started successfully on port 3000...'));
 
 server.listen(PORT, () => console.log('Started successfully on port 3000...'));
