@@ -235,4 +235,4 @@ server.post('/api/authorize', (req, res) => {
     res.status(200).json('OK')
 });
 
-server.listen(PORT, () => console.log('Started successfully on port 3000...'));
+server.listen(PORT, () => console.log('Started successfully on port', PORT));
