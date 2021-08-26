@@ -3,7 +3,15 @@ const API_SANDBOX_URL = 'https://sandbox.api.mastercard.com/fraud/merchant/v3/';
 const API_PROD_URL = 'https://api.mastercard.com/fraud/merchant/v3/';
 
 // Defines API Endpoint URL
-const API_URL = API_SANDBOX_URL;
+const API_URL = (() => {
+    if (process.env.NODE_ENV === 'production') {
+        console.log('[Production mode]')
+        return API_PROD_URL;
+    }
+
+    console.log('[Sandbox mode]')
+    return API_SANDBOX_URL;
+})();
 
 // Defines a port variable
 const PORT = process.env.PORT || 3000;
