@@ -20,8 +20,7 @@ const PORT = process.env.PORT || 3000;
 const express = require('express');
 const formData = require('express-form-data');
 const path = require('path');
-const https = require('https');
-const fs = require('fs');
+const https = require('https'); // For SSL using
 const bodyParser = require('body-parser');
 
 const oauthSigner = require('mastercard-oauth1-signer');
