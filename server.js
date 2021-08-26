@@ -198,10 +198,12 @@ server.post('/api/retro/retro-inquiry-details', (req, res) => {
 
     // Defines a request parameters
     const uri = url.create(API_URL, req);
-    const method = 'POST';
+    const method = 'GET';
 
     // Defines OAuth Authorization header
     const authHeader = oauthSigner.getAuthorizationHeader(uri, method, data.bodyData, data.consumerKey, signingKey);
+
+    console.log(data.bodyData)
 
     // Performs a request to MasterCard
     perform.request(uri, {

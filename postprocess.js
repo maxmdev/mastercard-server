@@ -9,8 +9,8 @@ function addReferenceID (data) {
             // Returns data with new property
             return data;
         } catch (error) {
-            // Returns original data if something went wrong
-            console.log(error); // For logging purposes better to leave
+            // Returns original data if something went wrong and logs error
+            console.log(error);
             return data;
         }
     }
