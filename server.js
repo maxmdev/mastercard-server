@@ -108,7 +108,7 @@ server.post('/api/add-merchant', (req, res) => {
     const method = 'POST';
 
     // Defines OAuth Authorization header
-    const authHeader = oauthSigner.getAuthorizationHeader(uri, method, data.bodyData, data.consumerKey, signingKey);
+    const authHeader = oauthSigner.getAuthorizationHeader(uri, method, postprocess.formatDate(data.bodyData), data.consumerKey, signingKey);
 
     // Performs a request to MasterCard
     perform.request(uri, {
@@ -118,7 +118,7 @@ server.post('/api/add-merchant', (req, res) => {
             'Content-Type': 'application/json',
             'Authorization': authHeader
         },
-        body: data.bodyData,
+        body: postprocess.formatDate(data.bodyData),
         cache: 'no-cache',
         redirect: 'follow'
     })
