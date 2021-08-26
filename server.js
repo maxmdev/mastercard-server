@@ -198,7 +198,7 @@ server.post('/api/retro/retro-inquiry-details', (req, res) => {
 
     // Defines a request parameters
     const uri = url.create(API_URL, req);
-    const method = 'GET';
+    const method = 'POST';
 
     // Defines OAuth Authorization header
     const authHeader = oauthSigner.getAuthorizationHeader(uri, method, data.bodyData, data.consumerKey, signingKey);
