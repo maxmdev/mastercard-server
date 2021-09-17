@@ -1,3 +1,16 @@
+// Imports libraries
+const express = require('express');
+const formData = require('express-form-data');
+const path = require('path');
+const https = require('https'); // For SSL using
+const bodyParser = require('body-parser');
+
+const oauthSigner = require('mastercard-oauth1-signer');
+const perform = require('./request.js');
+const url = require('./url');
+const key = require('./key');
+const postprocess = require('./postprocess');
+
 // Defines constants
 const API_SANDBOX_URL = 'https://sandbox.api.mastercard.com/fraud/merchant/v3/';
 const API_PROD_URL = 'https://api.mastercard.com/fraud/merchant/v3/';
@@ -15,19 +28,6 @@ const API_URL = (() => {
 
 // Defines a port variable
 const PORT = process.env.PORT || 3000;
-
-// Imports libraries
-const express = require('express');
-const formData = require('express-form-data');
-const path = require('path');
-const https = require('https'); // For SSL using
-const bodyParser = require('body-parser');
-
-const oauthSigner = require('mastercard-oauth1-signer');
-const perform = require('./request.js');
-const url = require('./url');
-const key = require('./key');
-const postprocess = require('./postprocess');
 
 // Defines a server
 const server = express();
