@@ -14,7 +14,7 @@ async function request(uri, params = {}) {
 
     // MasterCard API returns XML or JSON in errors unpredictable, even if FORMAT=JSON is set (headers and query param).
     // To handle that I use try-catch, because JSON.parse fails when sees XML
-    // When XML response, app just resends it forward, when JSON, it tries to retrieve message description
+    // When XML response, app tries to retrieve description of error from XML response, converted to a string
     const responseText = await response.text()
         .then(text => {
             try {
@@ -23,7 +23,19 @@ async function request(uri, params = {}) {
                 const reasonDescription = data.Errors.Error[0]['Description'];
                 errorMessage = reasonCode + ': ' + reasonDescription + '.';
             } catch (error) {
-                throw new Error(text.toString());
+                const descriptionContainerOpen = '<Description>';
+                const descriptionContainerClosed = '</Description>';
+
+                const isXml = text.includes(descriptionContainerOpen);
+
+                if(isXml) {
+                    const errorStart = text.indexOf(descriptionContainerOpen);
+                    const errorEnd = text.indexOf(descriptionContainerClosed);
+
+                    const errorMessage = text.substring(errorStart + descriptionContainerOpen.length, errorEnd);
+
+                    throw new Error(errorMessage);
+                }
             }
         })
 
