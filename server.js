@@ -15,16 +15,16 @@ const postprocess = require('./postprocess');
 const API_SANDBOX_URL = 'https://sandbox.api.mastercard.com/fraud/merchant/v3/';
 const API_PROD_URL = 'https://api.mastercard.com/fraud/merchant/v3/';
 
-// Defines API Endpoint URL
-const API_URL = (() => {
-    if (process.env.NODE_ENV === 'production') {
-        console.log('[Production mode]')
-        return API_PROD_URL;
+// Returns API Endpoint URL
+const getApiEndpoint = (mode) => {
+    if (mode === 'sandbox') {
+        console.log('[Sandbox mode]')
+        return API_SANDBOX_URL;
     }
 
-    console.log('[Sandbox mode]')
-    return API_SANDBOX_URL;
-})();
+    console.log('[Production mode]')
+    return API_PROD_URL;
+};
 
 // Defines a port variable
 const PORT = process.env.PORT || 3000;
@@ -51,7 +51,7 @@ server.post('/api/termination-inquiry', (req, res) => {
     const signingKey = key.get(data);
 
     // Defines request parameters
-    const uri = url.create(API_URL, req);
+    const uri = url.create(getApiEndpoint(perform.retrieve(req).mode), req);
     const method = 'POST';
 
     // Defines OAuth Authorization Header
@@ -82,7 +82,7 @@ server.post('/api/termination-inquiry/:IRN', (req, res) => {
     const signingKey = key.get(data);
 
     // Defines request parameters
-    const uri = url.create(API_URL, req);
+    const uri = url.create(getApiEndpoint(perform.retrieve(req).mode), req);
     const method = 'GET';
 
     // Defines OAuth Authorization Header
@@ -114,7 +114,7 @@ server.post('/api/add-merchant', (req, res) => {
     const signingKey = key.get(data);
 
     // Defines request parameters
-    const uri = url.create(API_URL, req);
+    const uri = url.create(getApiEndpoint(perform.retrieve(req).mode), req);
     const method = 'POST';
 
     // Defines OAuth Authorization header
@@ -145,7 +145,7 @@ server.post('/api/common/contact-details', (req, res) => {
     const signingKey = key.get(data);
 
     // Defines a request parameters
-    const uri = url.create(API_URL, req);
+    const uri = url.create(getApiEndpoint(perform.retrieve(req).mode), req);
     const method = 'POST';
 
     // Defines OAuth Authorization header
@@ -176,7 +176,7 @@ server.post('/api/retro/retro-list', (req, res) => {
     const signingKey = key.get(data);
 
     // Defines a request parameters
-    const uri = url.create(API_URL, req);
+    const uri = url.create(getApiEndpoint(perform.retrieve(req).mode), req);
     const method = 'POST';
 
     // Defines OAuth Authorization header
@@ -207,7 +207,7 @@ server.post('/api/retro/retro-inquiry-details', (req, res) => {
     const signingKey = key.get(data);
 
     // Defines a request parameters
-    const uri = url.create(API_URL, req);
+    const uri = url.create(getApiEndpoint(perform.retrieve(req).mode), req);
     const method = 'POST';
 
     // Defines OAuth Authorization header
